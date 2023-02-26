@@ -35,6 +35,9 @@ app.use(express.json())
 app.use(helmet())
 app.use(morgan('common'))
 
+app.get("/", (req, res)=>{
+    res.json("Hello")
+})
 app.use('/api/user', userRoute)
 app.use('/api/auth', authRoute)
 app.use('/api/dashboard', dashboardRoute)
