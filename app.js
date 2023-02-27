@@ -51,10 +51,6 @@ app.listen(8800, ()=>{
     console.log("Backend Listening")
 });
 
-router.get('/', (req, res)=>{
-    res.send("Please work")
-})
-
 //Authentications
 //register
 router.post('/auth/register', async (req, res)=>{
