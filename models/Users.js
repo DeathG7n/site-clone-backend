@@ -5,6 +5,10 @@ const {
 } = require('uuid')
 
 const UserSchema = new mongoose.Schema({
+    admin:{
+        type: Boolean,
+        default: false
+    },
     profile_picture:{
         type: String,
         default: ''
