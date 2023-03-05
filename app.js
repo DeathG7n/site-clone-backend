@@ -105,6 +105,16 @@ router.get('/user/:id', async(req, res)=>{
         res.status(500).json(err)
     }
 })
+//get users
+router.get('/users', async(req, res)=>{
+    try{
+        const user = await Users.find({})
+        console.log(user)
+        res.status(200).json(user)
+    } catch(err){
+        res.status(500).json(err)
+    }
+})
 //delete user
 router.delete('/user/:id', async(req, res)=>{
     if(req.body.userId === req.params.id){
