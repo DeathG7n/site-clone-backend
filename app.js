@@ -39,7 +39,7 @@ app.use(express.json())
 app.use(helmet())
 app.use(morgan('common'))
 
-app.use("/images", express.static(path.join(__dirname, "public/images")));
+// app.use("/images", express.static(path.join(__dirname, "public/images")));
 
 app.get("/", (req, res)=>{
     res.json("Hello")
@@ -51,7 +51,7 @@ const storage = multer.diskStorage({
     },
     filename: function (req, file, cb) {
         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
-        cb(null, file.originalname + '-' + uniqueSuffix)
+        cb(null, req.body.name)
     }
   });
   
