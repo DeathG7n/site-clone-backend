@@ -39,30 +39,30 @@ app.use(express.json())
 app.use(helmet())
 app.use(morgan('common'))
 
-// app.use("/images", express.static(path.join(__dirname, "public/images")));
+app.use("/images", express.static(path.join(__dirname, "uploads")));
 
 app.get("/", (req, res)=>{
     res.json("Hello")
 })
 
 const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-      cb(null, "public/images");
-    },
+    destination: "uploads",
     filename: function (req, file, cb) {
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
-        cb(null, req.body.name)
+        cb(null, file.originalname)
     }
-  });
+});
   
-  const upload = multer({ storage: storage });
-  app.post("/api/upload", upload.single("file"), (req, res) => {
-    try {
-      return res.status(200).json("File uploded successfully");
-    } catch (error) {
-        return res.status(500).json(error);
-    }
-  });
+const upload = multer({ storage: storage });
+app.post("/api/upload", upload.single("file"), async(req, res) => {
+  try {
+    console.log(req.body.name)
+    const user = await Users.findByIdAndUpdate(req.body.userId)
+    console.log(user)
+    return res.status(200).json("File uploaded successfully"); 
+  } catch (error) {
+      return res.status(500).json(error);
+  }
+});
 
 app.use("/api", router)
 // app.use('/api/user', userRoute)
