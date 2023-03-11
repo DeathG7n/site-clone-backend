@@ -8,7 +8,7 @@ const UserSchema = new mongoose.Schema({
     admin:{
         type: Boolean,
         default: false
-    },
+    }, 
     profile_picture:{
         type: String,
         default: ''
@@ -81,14 +81,17 @@ const UserSchema = new mongoose.Schema({
             totalDeposit: 0,
             totalWithdraw: 0,
             referralEarnings: 0,
-            details:[
-                {
-                    amount: 5,
-                    wallet: 'Deposit Wallet',
-                    desc: 'You have got Sign Up Bonus',
-                }
-            ]
         }
+    },
+    details:{
+        type: Array,
+        default: [
+            {
+                amount: 5,
+                wallet: 'Deposit Wallet',
+                desc: 'You have got Sign Up Bonus',
+            }
+        ]
     }
 },
     {timestamps: true}
