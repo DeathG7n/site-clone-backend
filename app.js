@@ -40,33 +40,12 @@ app.use(express.json())
 app.use(helmet())
 app.use(morgan('common'))
 
-app.use("/images", express.static(path.join(__dirname, "uploads")));
-
 app.get("/", (req, res)=>{
     res.json("Hello")
 })
 
-const storage = multer.diskStorage({
-    destination: "uploads",
-    filename: function (req, file, cb) {
-        cb(null, file.originalname)
-    }
-});
-  
-const upload = multer({ storage: storage });
-app.post("/api/upload", upload.single("file"), async(req, res) => {
-  try {
-    return res.status(200).json("File uploaded successfully"); 
-  } catch (error) {
-      return res.status(500).json(error);
-  }
-});
-
 
 app.use("/api", router)
-// app.use('/api/user', userRoute)
-// app.use('/api/auth', authRoute)
-// app.use('/api/dashboard', dashboardRoute)
 
 //Port
 app.listen(8800, ()=>{
@@ -202,16 +181,14 @@ router.get('/transactions', async(req, res)=>{
 })
 
 //process transaction
-router.put('/confirm/transaction/:id', async(req, res)=>{
+router.put('/confirm/transaction/:id/:no', async(req, res)=>{
     if(req.body.userId === req.params.id){
         try{
             const user = await Users.findByIdAndUpdate(req.params.id)
             await user.updateOne({$push: {details: req.body.details}})
-            const transaction = await Transactions.find({userId: req.params.id})
-            await transaction[0].updateOne({$set: {processed: req.body.processed}})
-
-            // res.status(200).json('Transaction has been processed')
-            res.status(200).json(transaction)
+            const transaction = await Transactions.findByIdAndUpdate(req.params.no)
+            await transaction.updateOne({$set: {processed: req.body.processed}})
+            res.status(200).json('Transaction has been processed')
         } catch(err){
             res.status(500).json(err)
             console.log(err)
